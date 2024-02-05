@@ -147,5 +147,55 @@ namespace ServerChecker
             pgb_Status.Value = (int)percentage;
         }
         #endregion
+
+        #region Save Section
+        private void btn_SaveGoodList_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveGoodServers = new SaveFileDialog();
+            saveGoodServers.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            saveGoodServers.Title = "Save Good Servers";
+
+            if (saveGoodServers.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = saveGoodServers.FileName;
+
+                ListBox.ObjectCollection items = lsb_GoodList.Items;
+
+                using (StreamWriter sw = new StreamWriter(filePath))
+                {
+                    foreach (var item in items)
+                    {
+                        sw.WriteLine(item.ToString());
+                    }
+                }
+
+                MessageBox.Show("Good servers list saved successfully!", "Saved!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void btn_SaveLog_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog saveLogs = new SaveFileDialog();
+            saveLogs.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            saveLogs.Title = "Save Logs";
+
+            if (saveLogs.ShowDialog() == DialogResult.OK)
+            {
+                string filePath = saveLogs.FileName;
+
+                string content = rtb_Log.Text;
+
+                File.WriteAllText(filePath, content);
+
+                MessageBox.Show("Logs content saved successfully!", "Saved!", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+        }
+
+        private void btn_ClearLog_Click(object sender, EventArgs e)
+        {
+            rtb_Log.Text = string.Empty;
+            pgb_Status.Value = 0;
+        }
+        #endregion
     }
 }

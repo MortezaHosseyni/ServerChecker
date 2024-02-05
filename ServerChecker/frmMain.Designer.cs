@@ -124,6 +124,7 @@
             this.btn_SaveGoodList.Text = "💾";
             this.toolTip.SetToolTip(this.btn_SaveGoodList, "Save Good List");
             this.btn_SaveGoodList.UseVisualStyleBackColor = true;
+            this.btn_SaveGoodList.Click += new System.EventHandler(this.btn_SaveGoodList_Click);
             // 
             // rtb_Log
             // 
@@ -151,6 +152,7 @@
             this.btn_SaveLog.Text = "💾";
             this.toolTip.SetToolTip(this.btn_SaveLog, "Save Log\'s");
             this.btn_SaveLog.UseVisualStyleBackColor = true;
+            this.btn_SaveLog.Click += new System.EventHandler(this.btn_SaveLog_Click);
             // 
             // btn_ClearLog
             // 
@@ -161,6 +163,7 @@
             this.btn_ClearLog.Text = "🧹";
             this.toolTip.SetToolTip(this.btn_ClearLog, "Clear Log\'s");
             this.btn_ClearLog.UseVisualStyleBackColor = true;
+            this.btn_ClearLog.Click += new System.EventHandler(this.btn_ClearLog_Click);
             // 
             // btn_Start
             // 
