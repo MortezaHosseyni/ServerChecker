@@ -46,8 +46,6 @@
             this.btn_Start = new System.Windows.Forms.Button();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.pgb_Status = new System.Windows.Forms.ToolStripProgressBar();
-            this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.ctx_Status = new System.Windows.Forms.ToolStripStatusLabel();
             this.statusStrip.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -174,14 +172,13 @@
             this.btn_Start.Text = "Start";
             this.toolTip.SetToolTip(this.btn_Start, "Please select server list");
             this.btn_Start.UseVisualStyleBackColor = true;
+            this.btn_Start.Click += new System.EventHandler(this.btn_Start_Click);
             // 
             // statusStrip
             // 
             this.statusStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.pgb_Status,
-            this.toolStripStatusLabel1,
-            this.ctx_Status});
+            this.pgb_Status});
             this.statusStrip.Location = new System.Drawing.Point(0, 510);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(900, 26);
@@ -192,18 +189,6 @@
             // 
             this.pgb_Status.Name = "pgb_Status";
             this.pgb_Status.Size = new System.Drawing.Size(100, 18);
-            // 
-            // toolStripStatusLabel1
-            // 
-            this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(13, 20);
-            this.toolStripStatusLabel1.Text = "|";
-            // 
-            // ctx_Status
-            // 
-            this.ctx_Status.Name = "ctx_Status";
-            this.ctx_Status.Size = new System.Drawing.Size(127, 20);
-            this.ctx_Status.Text = "Select a server list";
             // 
             // frmMain
             // 
@@ -226,6 +211,9 @@
             this.Controls.Add(this.lbl_Title);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
+            this.MaximumSize = new System.Drawing.Size(918, 583);
+            this.MinimumSize = new System.Drawing.Size(918, 583);
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Server Checker";
@@ -255,8 +243,6 @@
         private System.Windows.Forms.Button btn_Start;
         private System.Windows.Forms.StatusStrip statusStrip;
         private System.Windows.Forms.ToolStripProgressBar pgb_Status;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-        private System.Windows.Forms.ToolStripStatusLabel ctx_Status;
     }
 }
 

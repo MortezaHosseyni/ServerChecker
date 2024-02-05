@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ServerChecker
@@ -50,6 +51,100 @@ namespace ServerChecker
                 btn_Start.Enabled = true;
                 toolTip.SetToolTip(btn_Start, "Start checking process");
             }
+        }
+        #endregion
+
+        private async void btn_Start_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                string inputFile = txt_File.Text;
+                if (!File.Exists(inputFile) || !string.Equals(Path.GetExtension(inputFile), ".txt", StringComparison.OrdinalIgnoreCase))
+                {
+                    MessageBox.Show("File not found", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                string[] lines = File.ReadAllLines(inputFile);
+
+                int totalServers = lines.Length;
+                int currentServer = 0;
+
+                foreach (string line in lines)
+                {
+                    string[] parts = line.Split('@');
+                    string[] addressParts = parts[0].Split(':');
+                    string ip = addressParts[0];
+                    int port = int.Parse(addressParts[1]);
+
+                    string[] credentials = parts[1].Split(';');
+                    string username = credentials[0];
+                    string password = credentials[1];
+
+                    bool isSuccess = await TestRdpConnectionAsync(ip, port, username, password);
+
+                    string logMessage = $"{DateTime.Now}: {ip} - {username} - {(isSuccess ? "OK" : "Failed")}";
+                    UpdateRichTextBoxLogs(logMessage);
+
+                    if (isSuccess)
+                    {
+                        UpdateListBoxGoodServers($"{ip} - {username}");
+                    }
+
+                    currentServer++;
+                    UpdateProgressBar(currentServer, totalServers);
+                }
+
+                Console.WriteLine("Done!");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
+
+        #region Test Section
+        private async Task<bool> TestRdpConnectionAsync(string ip, int port, string username, string password)
+        {
+            try
+            {
+                return await Task.Run(() =>
+                {
+                    AxMSTSCLib.AxMsRdpClient11 rdp = new AxMSTSCLib.AxMsRdpClient11();
+                    rdp.Server = ip;
+                    rdp.AdvancedSettings2.RDPPort = port;
+                    rdp.UserName = username;
+                    rdp.AdvancedSettings2.ClearTextPassword = password;
+                    rdp.ConnectingText = "Connecting...";
+                    rdp.DisconnectedText = "Disconnected";
+                    rdp.FullScreen = false;
+
+                    rdp.Connect();
+                    rdp.Disconnect();
+                    return true;
+                });
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        private void UpdateRichTextBoxLogs(string logMessage)
+        {
+            rtb_Log.AppendText(logMessage + Environment.NewLine);
+            rtb_Log.ScrollToCaret();
+        }
+
+        private void UpdateListBoxGoodServers(string serverInfo)
+        {
+            lsb_GoodList.Items.Add(serverInfo);
+        }
+
+        private void UpdateProgressBar(int current, int total)
+        {
+            double percentage = (double)current / total * 100;
+            pgb_Status.Value = (int)percentage;
         }
         #endregion
     }
